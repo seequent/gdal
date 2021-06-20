@@ -131,6 +131,41 @@ jpeg_free_large (CPL_UNUSED j_common_ptr cinfo, void FAR * object, CPL_UNUSED si
 
 
 /*
+ * Copied from newer versions of libjpeg that actually work on Windows 7
+ * without running as admin. They don't use a file based backing store,
+ * instead just relying on virtual memory.
+ *   -- Tim Evans
+ */
+ 
+GLOBAL(long)
+jpeg_mem_available (CPL_UNUSED j_common_ptr cinfo, CPL_UNUSED long min_bytes_needed,
+		    long max_bytes_needed, CPL_UNUSED long already_allocated)
+{
+  return max_bytes_needed;
+}
+
+GLOBAL(void)
+jpeg_open_backing_store (CPL_UNUSED j_common_ptr cinfo, CPL_UNUSED backing_store_ptr info,
+			 CPL_UNUSED long total_bytes_needed)
+{
+  ERREXIT(cinfo, JERR_NO_BACKING_STORE);
+}
+
+GLOBAL(long)
+jpeg_mem_init (CPL_UNUSED j_common_ptr cinfo)
+{
+  return 0;			/* just set max_memory_to_use to 0 */
+}
+
+GLOBAL(void)
+jpeg_mem_term (CPL_UNUSED j_common_ptr cinfo)
+{
+  /* no work */
+}
+
+
+#if 0
+/*
  * This routine computes the total memory space available for allocation.
  * It's impossible to do this in a portable way; our current solution is
  * to make the user tell us (with a default value set at compile time).
@@ -231,3 +266,4 @@ jpeg_mem_term (CPL_UNUSED j_common_ptr cinfo)
 {
   /* no work */
 }
+#endif
