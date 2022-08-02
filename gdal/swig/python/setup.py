@@ -129,7 +129,7 @@ else:
         all_fixers = set(get_fixers_from_package('lib2to3.fixes'))
         exclude_fixers = sorted(all_fixers.difference(fixer_names))
 
-        extra['use_2to3'] = True
+        # extra['use_2to3'] = True
         extra['use_2to3_fixers'] = []
         extra['use_2to3_exclude_fixers'] = exclude_fixers
 
